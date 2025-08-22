@@ -1,0 +1,25 @@
+# How far players can SEE and BROADCAST on the Locator Bar (in blocks)
+range: 250
+
+# All player-facing messages (supports & color codes)
+messages:
+  prefix: ""
+  no-permission: "&cNo permission."
+  players-only: "&cPlayers only."
+
+  invalid-number: "&cNot a number: {input}"
+
+  # /locatorrange
+  range-usage: "&eUsage: /{label} <blocks>"
+  range-set: "&fLocator Bar range set to &e{range}&f for players who have their bar &aON&a."
+
+  # /locatorbar
+  bar-usage: ""
+  bar-status-on: "&aYour locator bar is &aON&a at &b{range}&a."
+  bar-status-off: "&eYour locator bar is &cOFF&e (others still see you)."
+  bar-on: "&8» &fYour locator bar is now turned &aON&a."
+  bar-off: "&8» &fYour locator bar is now turned &cOFF&7 (others still see you)."
+
+  # /locatorcolor
+  color-usage: "&eUsage: /{label} <named|#RRGGBB|RRGGBB|reset>"
+  color-updated: ""

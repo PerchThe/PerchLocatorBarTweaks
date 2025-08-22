@@ -1,0 +1,22 @@
+name: PerchLocatorBarTweaks
+main: me.perch.LocatorBarTweaks
+version: 1.0.1
+api-version: '1.21'
+description: Tweaks to the Locator Bar
+softdepend:
+  - PlaceholderAPI
+
+commands:
+  locatorrange:
+    description: Set the global Locator Bar range (receive+transmit for ON players)
+    usage: /<command> <blocks>
+    permission: perchlocator.admin
+  locatorbar:
+    description: Toggle your own locator bar (only what YOU see)
+    usage: /<command> <on|off|toggle|status>
+  locatorcolor:
+    description: Save a preferred locator bar color (future compatibility)
+    usage: /<command> <color>
+permissions:
+  perchlocator.admin:
+    default: op
