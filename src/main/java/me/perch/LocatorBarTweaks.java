@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 /**
  * LocatorBarTweaks
- * - Default ON for any player not explicitly opted out (applied on enable for online players and on join)
+ * - EDITED: Only applies default range to players joining for the FIRST time.
  * - Per-player toggle (/locatorbar on|off|toggle|status) — only affects their own receive range
  * - Global range (/locatorrange <blocks>) — updates only players whose bar is ON
  * - Color setting (/locatorcolor <named|#RRGGBB|RRGGBB|reset>) via vanilla /waypoint modify
@@ -101,17 +101,8 @@ public class LocatorBarTweaks extends JavaPlugin implements Listener {
         // events (includes PluginEnableEvent for late PAPI enable)
         Bukkit.getPluginManager().registerEvents(this, this);
 
-        // Ensure default ON for all currently online players who aren't explicitly OFF
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            UUID id = p.getUniqueId();
-            if (!receiveDisabled.contains(id)) {
-                int remembered = lastReceiveWhenEnabled.getOrDefault(id, globalRange);
-                lastReceiveWhenEnabled.put(id, remembered);
-                setReceiveRange(p, remembered);
-                setTransmitRange(p, remembered);
-            }
-        }
-        saveData();
+        // NOTE: Loop to force settings on online players has been removed
+        // to prevent resetting existing players on reload.
 
         // Try PAPI register now (in case PAPI is already enabled)
         tryRegisterPapi();
@@ -275,19 +266,19 @@ public class LocatorBarTweaks extends JavaPlugin implements Listener {
 
     // ---------------- Events ----------------
     /**
-     * On join: if player is NOT explicitly OFF, force them ON to remembered/global range.
-     * (Attributes persist, but we enforce here to guarantee default-ON policy.)
+     * On join: Only if the player has NEVER played before do we enforce
+     * the default receive/transmit ranges. Returning players are left alone.
      */
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-        UUID id = p.getUniqueId();
 
-        if (!receiveDisabled.contains(id)) {
-            int remembered = lastReceiveWhenEnabled.getOrDefault(id, globalRange);
-            lastReceiveWhenEnabled.put(id, remembered);
-            setReceiveRange(p, remembered);
-            setTransmitRange(p, remembered);
+        if (!p.hasPlayedBefore()) {
+            UUID id = p.getUniqueId();
+            // This is a first-time join
+            lastReceiveWhenEnabled.put(id, globalRange);
+            setReceiveRange(p, globalRange);
+            setTransmitRange(p, globalRange);
             saveData();
         }
     }
